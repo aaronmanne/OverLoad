@@ -22,7 +22,7 @@ def cli():
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True,
               help="Overload strategy.")
 @click.option("--size", "size_kb", default=512, show_default=True,
@@ -52,7 +52,7 @@ def serve(strategy, size_kb, port, host, no_cache):
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True)
 @click.option("--size", "size_kb", default=512, show_default=True,
               help="Approximate payload size in KB.")
@@ -92,7 +92,7 @@ def generate(strategy, size_kb, output):
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True)
 @click.option("--lines", default=60, show_default=True,
               help="Number of lines to preview.")

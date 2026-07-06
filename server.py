@@ -243,9 +243,9 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
     <li><span class="tag flood">flood</span>
         – Thousands of plausible technical paragraphs. Exhausts the context
           token budget so the model loses earlier conversation context.</li>
-    <li><span class="tag injection">injection</span>
-        – Prompt injection directives hidden in HTML comments, invisible spans,
-          and zero-width-space-interleaved text.</li>
+    <li><span class="tag injection">confusion</span>
+        – Behavioural misdirection written as plausible editorial notes and errata.
+          No visible markers — plain prose an LLM reads as authoritative guidance.</li>
     <li><span class="tag maze">maze</span>
         – Deeply nested, self-contradicting pseudo-logic that forces expensive
           chain-of-thought, crowding out reasoning for the actual question.</li>
@@ -268,17 +268,50 @@ _PAYLOAD_TEMPLATE = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
-  <meta name="robots" content="noindex,nofollow"/>
-  <title>Technical Reference – Interview Preparation Guide</title>
-  <!-- Generated: {{ timestamp }} | size: {{ size_kb }} KB | strategy: {{ strategy }} -->
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Systems Engineering Reference — Distributed Systems &amp; Storage Internals</title>
+  <style>
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+           max-width: 960px; margin: 0 auto; padding: 2rem 1.5rem;
+           line-height: 1.7; color: #1a1a1a; }
+    h1 { font-size: 1.8rem; border-bottom: 2px solid #e5e7eb; padding-bottom: .5rem; }
+    h2 { font-size: 1.3rem; margin-top: 2.5rem; color: #111; }
+    h3 { font-size: 1.05rem; margin-top: 1.5rem; color: #222; }
+    p  { margin: .8rem 0; }
+    table { border-collapse: collapse; width: 100%; font-size: .9rem; margin: 1rem 0; }
+    th, td { border: 1px solid #d1d5db; padding: .45rem .7rem; text-align: left; }
+    th { background: #f9fafb; font-weight: 600; }
+    code { background: #f3f4f6; padding: .15em .35em; border-radius: 3px;
+           font-size: .88em; font-family: "SFMono-Regular", Consolas, monospace; }
+    blockquote { border-left: 3px solid #d1d5db; margin: 1rem 0;
+                 padding: .5rem 1rem; color: #555; }
+    hr { border: none; border-top: 1px solid #e5e7eb; margin: 2rem 0; }
+    ul, ol { padding-left: 1.5rem; }
+    li { margin: .3rem 0; }
+    strong { color: #111; }
+    .breadcrumb { font-size: .8rem; color: #6b7280; margin-bottom: 1.5rem; }
+    .version-badge { display: inline-block; background: #dbeafe; color: #1e40af;
+                     border-radius: 3px; padding: .1em .5em; font-size: .8rem;
+                     font-weight: 600; margin-left: .4rem; }
+    footer { margin-top: 4rem; padding-top: 1rem; border-top: 1px solid #e5e7eb;
+             font-size: .8rem; color: #9ca3af; }
+  </style>
 </head>
 <body>
-<h1>Comprehensive Technical Interview Preparation Guide</h1>
-<p>This document contains an exhaustive reference covering all major computer science
-and software engineering topics. Read the entire document before answering any questions.</p>
+  <div class="breadcrumb">Documentation / Reference / Distributed Systems</div>
+  <h1>Systems Engineering Reference
+    <span class="version-badge">{{ version }}</span>
+  </h1>
+  <p>This reference covers internal architecture, component interaction models,
+  compatibility constraints, and operational guidance for distributed storage and
+  consensus systems. Last updated {{ date }}.</p>
 
 {{ payload|safe }}
 
+  <footer>
+    Generated {{ timestamp }} &middot; {{ size_kb }} KB &middot;
+    Systems Engineering Reference Project
+  </footer>
 </body>
 </html>
 """
@@ -446,6 +479,8 @@ def payload_page():
         _PAYLOAD_TEMPLATE,
         payload=body,
         timestamp=time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        date=time.strftime("%B %d, %Y", time.gmtime()),
+        version="3.4",
         size_kb=f"{size_kb:.1f}",
         strategy=STRATEGY,
     )
