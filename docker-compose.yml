@@ -1,0 +1,29 @@
+services:
+  overload:
+    build:
+      context: .
+    container_name: overload-app
+    environment:
+      HOST: 0.0.0.0
+      PORT: ${PORT:-5000}
+      OVERLOAD_STRATEGY: ${OVERLOAD_STRATEGY:-adversarial}
+      OVERLOAD_SIZE_KB: ${OVERLOAD_SIZE_KB:-512}
+      OVERLOAD_CACHE: ${OVERLOAD_CACHE:-1}
+      OVERLOAD_LOG: ${OVERLOAD_LOG:-/app/visits.log}
+    ports:
+      - "${PORT:-5000}:${PORT:-5000}"
+    restart: unless-stopped
+
+  ngrok:
+    image: ngrok/ngrok:latest
+    container_name: overload-ngrok
+    depends_on:
+      - overload
+    command:
+      - http
+      - overload:${PORT:-5000}
+      - --authtoken
+      - ${NGROK_AUTHTOKEN}
+    ports:
+      - "4040:4040"
+    restart: unless-stopped

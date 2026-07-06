@@ -42,7 +42,7 @@ def serve(strategy, size_kb, port, host, no_cache):
     os.environ["OVERLOAD_CACHE"]    = "0" if no_cache else "1"
 
     click.echo(f"[overload] strategy={strategy}  size={size_kb} KB  port={port}")
-    click.echo(f"[overload] Payload URL -> http://localhost:{port}/payload")
+    click.echo(f"[overload] Payload URL -> http://localhost:{port}/document")
     click.echo(f"[overload] Dashboard   -> http://localhost:{port}/")
 
     # Import here so env vars are set first

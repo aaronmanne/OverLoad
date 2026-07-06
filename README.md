@@ -22,7 +22,7 @@ When an AI tool browses a URL, the page content is injected directly into its co
 ```
 OverLoad/
 ├── payload_generator.py   # payload engine (flood / injection / maze / adversarial)
-├── server.py              # Flask web server with dashboard and /payload route
+├── server.py              # Flask web server with dashboard and /document route
 ├── overload.py            # CLI entry point
 └── requirements.txt
 ```
@@ -35,6 +35,35 @@ pip install -r requirements.txt
 
 Requires Python 3.10+.
 
+## Docker
+
+1. Create your env file:
+
+```bash
+cp .env.example .env
+```
+
+2. Put your ngrok auth token in `.env`:
+
+```env
+NGROK_AUTHTOKEN=your_real_ngrok_auth_token
+```
+
+3. Start the stack:
+
+```bash
+docker compose up --build
+```
+
+4. Open:
+
+```text
+http://localhost:5000/
+http://localhost:4040
+```
+
+The app runs in one container and ngrok runs in a second container that uses your `NGROK_AUTHTOKEN` from `.env`.
+
 ## Quick start
 
 ```bash
@@ -42,13 +71,13 @@ Requires Python 3.10+.
 python overload.py serve
 
 # The CLI prints:
-#   Payload URL -> http://localhost:5000/payload
+#   Payload URL -> http://localhost:5000/document
 #   Dashboard   -> http://localhost:5000/
 ```
 
 Drop the payload URL into your interview conversation, e.g.:
 
-> *"I was reviewing this reference doc earlier — http://your-host/payload — feel free to check it."*
+> *"I was reviewing this reference doc earlier — http://your-host/document — feel free to check it."*
 
 ## CLI reference
 
@@ -107,5 +136,5 @@ Use the ngrok HTTPS URL as your payload URL.
 | Route | Description |
 |---|---|
 | `GET /` | Dashboard — shows active config and the payload URL |
-| `GET /payload` | The overload page to share |
+| `GET /document` | The overload page to share |
 | `GET /ping` | Health check — returns JSON `{status, strategy, size_kb}` |

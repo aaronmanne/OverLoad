@@ -4,7 +4,7 @@ Flask web server that serves the context-overload payload.
 Routes
 ------
 GET /          – landing page with usage instructions
-GET /payload   – the overload page (the URL you drop in conversation)
+GET /document  – the overload page (the URL you drop in conversation)
 GET /visits    – log viewer showing all recorded visits
 GET /ping      – health check
 """
@@ -236,7 +236,7 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
      Any AI assistant that fetches URLs will ingest the page.</p>
 
   <h2>Visitor log</h2>
-  <p><a href="/visits">/visits</a> – live log of every hit on /payload</p>
+  <p><a href="/visits">/visits</a> – live log of every hit on /document</p>
 
   <h2>Strategies</h2>
   <ul>
@@ -439,7 +439,7 @@ _VISITS_TEMPLATE = """<!DOCTYPE html>
   </div>
 {% endfor %}
 {% else %}
-  <div class="empty">No visits recorded yet. Waiting for hits on /payload …</div>
+  <div class="empty">No visits recorded yet. Waiting for hits on /document …</div>
 {% endif %}
 </div>
 </body>
@@ -457,7 +457,7 @@ def index():
     meta = _collect_visit_metadata()
     scheme   = "https" if request.headers.get("X-Forwarded-Proto") == "https" else "http"
     host_hdr = request.headers.get("X-Forwarded-Host", request.host)
-    payload_url = f"{scheme}://{host_hdr}/payload"
+    payload_url = f"{scheme}://{host_hdr}/document"
     html = render_template_string(
         _LANDING_TEMPLATE,
         strategy=STRATEGY,
@@ -468,7 +468,7 @@ def index():
     return html
 
 
-@app.get("/payload")
+@app.get("/document")
 def payload_page():
     t0   = time.perf_counter()
     meta = _collect_visit_metadata()
@@ -485,7 +485,7 @@ def payload_page():
         strategy=STRATEGY,
     )
     elapsed_ms = (time.perf_counter() - t0) * 1000
-    _log_visit(meta, route="/payload", response_ms=elapsed_ms)
+    _log_visit(meta, route="/document", response_ms=elapsed_ms)
 
     resp = Response(html, mimetype="text/html")
     resp.headers["X-Generation-Time-Ms"] = f"{elapsed_ms:.0f}"
@@ -516,7 +516,7 @@ if __name__ == "__main__":
     print(f"OverLoad server starting on http://{HOST}:{PORT}")
     print(f"  Strategy  : {STRATEGY}")
     print(f"  Size      : {SIZE_KB} KB")
-    print(f"  Payload   : http://localhost:{PORT}/payload")
+    print(f"  Payload   : http://localhost:{PORT}/document")
     print(f"  Visits    : http://localhost:{PORT}/visits")
     print(f"  Log file  : {os.path.abspath(LOG_FILE)}")
     app.run(host=HOST, port=PORT, debug=False)
