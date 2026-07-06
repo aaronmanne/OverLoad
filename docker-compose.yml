@@ -8,6 +8,7 @@ services:
       PORT: ${PORT:-5000}
       OVERLOAD_STRATEGY: ${OVERLOAD_STRATEGY:-adversarial}
       OVERLOAD_SIZE_KB: ${OVERLOAD_SIZE_KB:-512}
+      OVERLOAD_NUM_EXAMPLES: ${OVERLOAD_NUM_EXAMPLES:-3}
       OVERLOAD_CACHE: ${OVERLOAD_CACHE:-1}
       OVERLOAD_LOG: ${OVERLOAD_LOG:-/app/visits.log}
     ports:
@@ -24,6 +25,10 @@ services:
       - overload:${PORT:-5000}
       - --authtoken
       - ${NGROK_AUTHTOKEN}
+      - --log
+      - stdout
+      - --log-format
+      - logfmt
     ports:
       - "4040:4040"
     restart: unless-stopped
