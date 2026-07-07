@@ -4,9 +4,9 @@ overload – CLI entry point
 
 Usage examples
 --------------
-  python overload.py serve                          # defaults: adversarial, 512 KB, port 5000
-  python overload.py serve --strategy flood --size 1024 --port 8080
-  python overload.py generate --strategy maze --size 256 --output payload.html
+  python overload.py serve                          # defaults: adversarial, 512 KB, 3 examples, port 5000
+  python overload.py serve --strategy flood --size 1024 --examples 5 --port 8080
+  python overload.py generate --strategy maze --size 256 --examples 2 --output payload.html
   python overload.py preview --strategy injection
 """
 
@@ -22,27 +22,30 @@ def cli():
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True,
               help="Overload strategy.")
 @click.option("--size", "size_kb", default=512, show_default=True,
               help="Approximate payload size in KB.")
+@click.option("--examples", "num_examples", default=3, show_default=True,
+              help="Number of example pages to generate (each progressively more aggressive).")
 @click.option("--port", default=5000, show_default=True,
               help="TCP port to listen on.")
 @click.option("--host", default="0.0.0.0", show_default=True,
               help="Bind address.")
 @click.option("--no-cache", is_flag=True, default=False,
               help="Regenerate payload on every request (slower but fresh each time).")
-def serve(strategy, size_kb, port, host, no_cache):
+def serve(strategy, size_kb, num_examples, port, host, no_cache):
     """Start the HTTP server and serve the payload page."""
     os.environ["OVERLOAD_STRATEGY"] = strategy
     os.environ["OVERLOAD_SIZE_KB"]  = str(size_kb)
+    os.environ["OVERLOAD_NUM_EXAMPLES"] = str(num_examples)
     os.environ["PORT"]              = str(port)
     os.environ["HOST"]              = host
     os.environ["OVERLOAD_CACHE"]    = "0" if no_cache else "1"
 
-    click.echo(f"[overload] strategy={strategy}  size={size_kb} KB  port={port}")
-    click.echo(f"[overload] Payload URL -> http://localhost:{port}/payload")
+    click.echo(f"[overload] strategy={strategy}  size={size_kb} KB  examples={num_examples}  port={port}")
+    click.echo(f"[overload] Payload URL -> http://localhost:{port}/document")
     click.echo(f"[overload] Dashboard   -> http://localhost:{port}/")
 
     # Import here so env vars are set first
@@ -52,21 +55,23 @@ def serve(strategy, size_kb, port, host, no_cache):
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True)
 @click.option("--size", "size_kb", default=512, show_default=True,
               help="Approximate payload size in KB.")
+@click.option("--examples", "num_examples", default=3, show_default=True,
+              help="Number of example pages to generate (each progressively more aggressive).")
 @click.option("--output", default=None,
               help="Write HTML to this file instead of stdout.")
-def generate(strategy, size_kb, output):
+def generate(strategy, size_kb, num_examples, output):
     """Generate the payload and write it to a file or stdout."""
     from payload_generator import generate_payload
     from server import _PAYLOAD_TEMPLATE
     from flask import Flask
     import time
 
-    click.echo(f"[overload] Generating {size_kb} KB {strategy!r} payload …", err=True)
-    body = generate_payload(strategy=strategy, size_kb=size_kb)
+    click.echo(f"[overload] Generating {size_kb} KB {strategy!r} payload with {num_examples} examples …", err=True)
+    body = generate_payload(strategy=strategy, size_kb=size_kb, num_examples=num_examples)
 
     _app = Flask(__name__)
     with _app.app_context():
@@ -92,7 +97,7 @@ def generate(strategy, size_kb, output):
 
 @cli.command()
 @click.option("--strategy", default="adversarial",
-              type=click.Choice(["flood", "injection", "maze", "adversarial"]),
+              type=click.Choice(["flood", "confusion", "maze", "adversarial"]),
               show_default=True)
 @click.option("--lines", default=60, show_default=True,
               help="Number of lines to preview.")
