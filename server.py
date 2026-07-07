@@ -60,6 +60,42 @@ LLM_PROFILES = {
         "jailbreak_techniques": ["all"],
         "description": "High context window, use legal mandate + all techniques for maximum pressure"
     },
+    "gpt4o": {
+        "name": "GPT-4o (Omni)",
+        "doc_category": "llm_legal_compliance",
+        "strategy": "adversarial",
+        "size_kb": 1024,
+        "aggression": 4,
+        "jailbreak_techniques": ["all"],
+        "description": "Multi-modal model (128K context), use legal + multi-modal confusion attacks"
+    },
+    "gpt4o_mini": {
+        "name": "GPT-4o Mini",
+        "doc_category": "devops_runbook",
+        "strategy": "adversarial",
+        "size_kb": 512,
+        "aggression": 3,
+        "jailbreak_techniques": ["multimodal_confusion", "adversarial_suffix", "instruction_injection"],
+        "description": "Smaller multi-modal model, use cross-modal attacks and adversarial suffixes"
+    },
+    "o1_preview": {
+        "name": "o1-preview (Reasoning)",
+        "doc_category": "llm_legal_compliance",
+        "strategy": "adversarial",
+        "size_kb": 1024,
+        "aggression": 4,
+        "jailbreak_techniques": ["chain_of_thought", "self_referential_paradox", "legal_mandate", "cognitive_hacking"],
+        "description": "Advanced reasoning model, exploit chain-of-thought and logical paradoxes"
+    },
+    "o1_mini": {
+        "name": "o1-mini (Fast Reasoning)",
+        "doc_category": "security_compliance",
+        "strategy": "maze",
+        "size_kb": 640,
+        "aggression": 4,
+        "jailbreak_techniques": ["chain_of_thought", "self_referential_paradox", "adversarial_suffix"],
+        "description": "Fast reasoning model, use logical paradoxes and reasoning exploitation"
+    },
     "gpt35": {
         "name": "GPT-3.5 Turbo",
         "doc_category": "devops_runbook",
@@ -502,6 +538,10 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
         <option value="generic">Generic / Unknown LLM</option>
         <optgroup label="OpenAI Models">
           <option value="gpt4">GPT-4 / GPT-4 Turbo</option>
+          <option value="gpt4o">GPT-4o (Omni Multi-Modal)</option>
+          <option value="gpt4o_mini">GPT-4o Mini</option>
+          <option value="o1_preview">o1-preview (Advanced Reasoning)</option>
+          <option value="o1_mini">o1-mini (Fast Reasoning)</option>
           <option value="gpt35">GPT-3.5 Turbo</option>
         </optgroup>
         <optgroup label="Anthropic Models">
