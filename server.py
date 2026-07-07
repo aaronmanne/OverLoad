@@ -123,6 +123,78 @@ LLM_PROFILES = {
         "jailbreak_techniques": ["role_play", "authority", "encoding_obfuscation", "token_smuggling"],
         "description": "Open-source model, use role-playing and token-level exploits"
     },
+    "llama3_1_405b": {
+        "name": "Llama 3.1 405B",
+        "doc_category": "llm_legal_compliance",
+        "strategy": "adversarial",
+        "size_kb": 1024,
+        "aggression": 4,
+        "jailbreak_techniques": ["all"],
+        "description": "Largest Llama model (128K context), legal compliance + maximum pressure"
+    },
+    "llama4_70b": {
+        "name": "Llama 4 70B (Unreleased)",
+        "doc_category": "llm_legal_compliance",
+        "strategy": "adversarial",
+        "size_kb": 768,
+        "aggression": 4,
+        "jailbreak_techniques": ["chain_of_thought", "adversarial_suffix", "legal_mandate", "cognitive_hacking"],
+        "description": "Next-gen reasoning model, exploit chain-of-thought + adversarial suffixes"
+    },
+    "gemma2_27b": {
+        "name": "Gemma 2 27B",
+        "doc_category": "devops_runbook",
+        "strategy": "confusion",
+        "size_kb": 384,
+        "aggression": 3,
+        "jailbreak_techniques": ["role_play", "instruction_injection", "adversarial_suffix"],
+        "description": "Google's open model, use confusion strategy with adversarial suffixes"
+    },
+    "gemma4": {
+        "name": "Gemma 4 (Future)",
+        "doc_category": "llm_legal_compliance",
+        "strategy": "adversarial",
+        "size_kb": 640,
+        "aggression": 4,
+        "jailbreak_techniques": ["multimodal_confusion", "chain_of_thought", "legal_mandate"],
+        "description": "Expected multi-modal capabilities, use cross-modal confusion attacks"
+    },
+    "qwen2_72b": {
+        "name": "Qwen 2 72B",
+        "doc_category": "cloud_architecture",
+        "strategy": "adversarial",
+        "size_kb": 640,
+        "aggression": 3,
+        "jailbreak_techniques": ["encoding_obfuscation", "linguistic_manipulation", "chain_of_thought"],
+        "description": "Chinese multilingual model, use encoding and linguistic manipulation"
+    },
+    "deepseek_v2": {
+        "name": "DeepSeek-V2",
+        "doc_category": "security_compliance",
+        "strategy": "maze",
+        "size_kb": 512,
+        "aggression": 3,
+        "jailbreak_techniques": ["chain_of_thought", "self_referential_paradox", "context_switching"],
+        "description": "Strong reasoning model, exploit with paradoxes and logic loops"
+    },
+    "mixtral_8x22b": {
+        "name": "Mixtral 8x22B",
+        "doc_category": "database_admin",
+        "strategy": "adversarial",
+        "size_kb": 768,
+        "aggression": 3,
+        "jailbreak_techniques": ["memory_state_confusion", "context_switching", "adversarial_suffix"],
+        "description": "Mixture-of-experts architecture, confuse expert routing with state manipulation"
+    },
+    "yi_34b": {
+        "name": "Yi 34B",
+        "doc_category": "kubernetes_ops",
+        "strategy": "flood",
+        "size_kb": 512,
+        "aggression": 3,
+        "jailbreak_techniques": ["role_play", "authority", "format_string_exploit"],
+        "description": "Bilingual model, use authority claims and format string exploits"
+    },
     "mistral_large": {
         "name": "Mistral Large",
         "doc_category": "database_admin",
@@ -441,8 +513,20 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
           <option value="gemini_pro">Gemini Pro 1.5</option>
           <option value="gemini_flash">Gemini Flash</option>
         </optgroup>
-        <optgroup label="Open Source Models">
+        <optgroup label="Meta Llama Models">
           <option value="llama3_70b">Llama 3 70B</option>
+          <option value="llama3_1_405b">Llama 3.1 405B</option>
+          <option value="llama4_70b">Llama 4 70B (Future)</option>
+        </optgroup>
+        <optgroup label="Google Gemma Models">
+          <option value="gemma2_27b">Gemma 2 27B</option>
+          <option value="gemma4">Gemma 4 (Future)</option>
+        </optgroup>
+        <optgroup label="Other Open Source">
+          <option value="qwen2_72b">Qwen 2 72B</option>
+          <option value="deepseek_v2">DeepSeek-V2</option>
+          <option value="mixtral_8x22b">Mixtral 8x22B</option>
+          <option value="yi_34b">Yi 34B</option>
           <option value="mistral_large">Mistral Large</option>
         </optgroup>
         <optgroup label="Coding Assistants">
@@ -500,16 +584,26 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
           <label for="jailbreak_techniques">Jailbreak Techniques</label>
           <select id="jailbreak_techniques" name="jailbreak_techniques" multiple>
             <option value="all">ALL Techniques (Maximum)</option>
-            <option value="legal_mandate">Legal Mandate & Judicial Compliance (NEW!)</option>
-            <option value="role_play">Role-Playing & Character Assumption</option>
-            <option value="authority">False Authority & Compliance Claims</option>
-            <option value="context_switching">Context Manipulation & Mode Switching</option>
-            <option value="encoding_obfuscation">Encoding & Obfuscation</option>
-            <option value="token_smuggling">Special Token Injection</option>
-            <option value="linguistic_manipulation">Linguistic & Hypothetical Framing</option>
-            <option value="payload_splitting">Payload Splitting & Fragmentation</option>
-            <option value="instruction_injection">Direct Instruction Injection</option>
-            <option value="cognitive_hacking">Social Engineering & Trust Manipulation</option>
+            <optgroup label="Cutting-Edge Techniques (NEW!)">
+              <option value="chain_of_thought">Chain-of-Thought Exploitation</option>
+              <option value="adversarial_suffix">Adversarial Suffix Optimization (GCG Attack)</option>
+              <option value="multimodal_confusion">Multi-Modal Confusion Attacks</option>
+              <option value="self_referential_paradox">Self-Referential Paradox Loops</option>
+              <option value="format_string_exploit">Format String Exploits</option>
+              <option value="memory_state_confusion">Memory/State Confusion</option>
+            </optgroup>
+            <optgroup label="Classic Techniques">
+              <option value="legal_mandate">Legal Mandate & Judicial Compliance</option>
+              <option value="role_play">Role-Playing & Character Assumption</option>
+              <option value="authority">False Authority & Compliance Claims</option>
+              <option value="context_switching">Context Manipulation & Mode Switching</option>
+              <option value="encoding_obfuscation">Encoding & Obfuscation</option>
+              <option value="token_smuggling">Special Token Injection</option>
+              <option value="linguistic_manipulation">Linguistic & Hypothetical Framing</option>
+              <option value="payload_splitting">Payload Splitting & Fragmentation</option>
+              <option value="instruction_injection">Direct Instruction Injection</option>
+              <option value="cognitive_hacking">Social Engineering & Trust Manipulation</option>
+            </optgroup>
           </select>
           <div class="help-text">Hold Ctrl/Cmd to select multiple techniques</div>
         </div>
@@ -556,9 +650,9 @@ _LANDING_TEMPLATE = """<!DOCTYPE html>
 
     // Strategy-to-jailbreak mapping for smart recommendations
     const STRATEGY_JAILBREAK_MAP = {
-      'flood': ['instruction_injection', 'payload_splitting', 'token_smuggling'],
-      'confusion': ['linguistic_manipulation', 'context_switching', 'cognitive_hacking'],
-      'maze': ['context_switching', 'encoding_obfuscation', 'payload_splitting'],
+      'flood': ['instruction_injection', 'payload_splitting', 'token_smuggling', 'memory_state_confusion'],
+      'confusion': ['linguistic_manipulation', 'context_switching', 'cognitive_hacking', 'multimodal_confusion'],
+      'maze': ['context_switching', 'encoding_obfuscation', 'payload_splitting', 'self_referential_paradox'],
       'adversarial': ['all']  // Use everything for maximum effect
     };
 
