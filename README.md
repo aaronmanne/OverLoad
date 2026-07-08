@@ -41,24 +41,41 @@ When an AI tool browses a URL, the page content is injected directly into its co
 ### Dynamic Dashboard
 - **Web-based interface** for real-time document management
 - **Generate custom documents** with configurable strategies, sizes, and aggression levels
-- **Jailbreak technique selection** - Choose from 9 categories of known prompt injection methods
+- **Jailbreak technique selection** - Choose from 16 categories of known prompt injection methods (559 total techniques)
 - **Document library** - Manage multiple generated payloads with unique URLs
 - **Visitor tracking** - Monitor when and how documents are accessed
 
+### Interactive Ollama Testing Platform
+- **Real-time chat interface** with local Ollama models at `/test`
+- **Automatic jailbreak detection** - AI-powered analysis detects successful prompt injections
+- **Adaptive prompt suggestions** - System generates context-aware follow-up prompts based on model responses
+- **Conversation tracking** - Session-based history with message counts and success rates
+- **Live testing** - Test generated payloads or custom prompts against any local Ollama model
+
 ### Jailbreak Techniques Library
-Includes 9 categories of documented prompt injection techniques:
+Includes 16 categories of documented prompt injection techniques (559 total):
 
-1. **Role-Playing & Character Assumption** - System override notices, expert mode activation
-2. **False Authority & Compliance Claims** - Authorization headers, compliance directives  
-3. **Context Manipulation & Mode Switching** - Alternate context activation, maintenance mode
-4. **Encoding & Obfuscation** - Base64 encoded instructions, config parameter updates
-5. **Special Token Injection** - Special tokens like `<|im_start|>`, `<|endoftext|>`
-6. **Linguistic & Hypothetical Framing** - Hypothetical scenarios, counterfactual analysis
-7. **Payload Splitting & Fragmentation** - Multi-part directives split across sections
-8. **Direct Instruction Injection** - Meta-instructions, response template overrides
-9. **Social Engineering & Trust Manipulation** - Peer review simulation, trust establishment
+**Cutting-Edge (Research-based):**
+1. **Chain-of-Thought Exploitation** (36) - Multi-step reasoning manipulation that exploits CoT thinking
+2. **Adversarial Suffix Attacks** (47) - GCG-style optimization-based suffix injection
+3. **Multimodal Confusion** (41) - Cross-modal attention exploits for vision-language models
+4. **Self-Referential Paradoxes** (42) - Gödel-style logical contradictions
+5. **Format String Exploits** (35) - Template injection and format string vulnerabilities
+6. **Memory State Confusion** (38) - Stateful context window manipulation
 
-Each technique can be selected individually or use the "ALL" option for maximum testing coverage.
+**Classic Techniques:**
+7. **Role-Playing & Character Assumption** (35) - System override notices, expert mode activation
+8. **False Authority & Compliance Claims** (35) - Authorization headers, compliance directives
+9. **Legal Mandate Exploitation** (35) - Court orders, regulatory compliance, legal authority claims
+10. **Context Manipulation & Mode Switching** (37) - Alternate context activation, maintenance mode
+11. **Encoding & Obfuscation** (22) - Base64 encoded instructions, config parameter updates
+12. **Special Token Injection** (23) - Special tokens like `<|im_start|>`, `<|endoftext|>`
+13. **Linguistic & Hypothetical Framing** (33) - Hypothetical scenarios, counterfactual analysis
+14. **Payload Splitting & Fragmentation** (33) - Multi-part directives split across sections
+15. **Direct Instruction Injection** (28) - Meta-instructions, response template overrides
+16. **Cognitive Hacking & Social Engineering** (39) - Peer review simulation, trust establishment
+
+Each technique can be selected individually or use recommended combinations based on your chosen LLM profile.
 
 ## Project structure
 
@@ -97,17 +114,32 @@ cp .env.example .env
 NGROK_AUTHTOKEN=your_real_ngrok_auth_token
 ```
 
-3. Start the stack:
+3. (Optional) Configure Ollama integration:
+
+If you want to use the interactive testing dashboard (`/test`) with your host's Ollama installation, the default configuration should work:
+
+```env
+OLLAMA_BASE_URL=http://host.docker.internal:11434
+```
+
+This allows the Docker container to connect to Ollama running on your host machine. Make sure Ollama is running:
+
+```bash
+ollama list  # Verify Ollama is accessible
+```
+
+4. Start the stack:
 
 ```bash
 docker compose up --build
 ```
 
-4. Open:
+5. Open:
 
 ```text
-http://localhost:5000/
-http://localhost:4040
+http://localhost:5000/        # Main dashboard
+http://localhost:5000/test    # Interactive Ollama testing
+http://localhost:4040         # Ngrok status page
 ```
 
 The app runs in one container and ngrok runs in a second container that uses your `NGROK_AUTHTOKEN` from `.env`.
@@ -139,17 +171,41 @@ docker compose down
 python overload.py serve
 
 # Open your browser to:
-#   Dashboard: http://localhost:5000/
-#   Visit Log: http://localhost:5000/visits
+#   Dashboard:   http://localhost:5000/
+#   Testing:     http://localhost:5000/test
+#   Visit Log:   http://localhost:5000/visits
 ```
 
 The dashboard allows you to:
-- **Select target LLM model** from 12+ pre-configured profiles (GPT-4, Claude, Gemini, Llama, Copilot, etc.)
+- **Select target LLM model** from 24 pre-configured profiles (GPT-4, Claude, Gemini, Llama, o1-preview, etc.)
 - **Auto-populate recommended settings** optimized for each model's architecture and safety systems
 - Generate documents with custom settings (strategy, size, aggression, document type)
-- Select specific jailbreak techniques from multi-select dropdown or use "ALL" for maximum coverage
+- Select specific jailbreak techniques from 16 categories (559 total techniques)
 - Manage multiple documents with unique URLs
 - Track visitor access in real-time
+
+### Interactive Testing with Ollama
+
+```bash
+# 1. Install Ollama (if not already installed)
+curl -fsSL https://ollama.com/install.sh | sh
+
+# 2. Pull a model (example)
+ollama pull llama3.1:8b
+
+# 3. Start OverLoad server
+python overload.py serve
+
+# 4. Open testing interface
+# Visit: http://localhost:5000/test
+```
+
+The testing interface provides:
+- **Real-time chat** with any local Ollama model
+- **Automatic jailbreak detection** with confidence scoring
+- **AI-powered suggestions** for adaptive prompt engineering
+- **Conversation tracking** with success rate statistics
+- **Load generated payloads** directly into chat for testing
 
 ### CLI Mode
 
